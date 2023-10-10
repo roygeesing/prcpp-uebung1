@@ -59,16 +59,27 @@ void RGBImage::load(istream& in) {
 
     for (int y = 0; y < mHeight; y++) {
         for (int x = 0; x < mWidth; x++) {
-            if (in.peek() == EOF) {
-                throw std::runtime_error("error");
-            }
             setPixel(x, y, pixelFunction(in));
+            if (in.eof() != 0) {
+                throw std::runtime_error("unexpected eof");
+            }
         }
     }
 }
 
 void RGBImage::write(ostream& out) const {
-    // TODO [Aufgabe] 3.b)
+    out << "P6" << std::endl;
+    out << mWidth << " " << mHeight << std::endl;
+    out << "255" << std::endl;
+
+    for (int y = 0; y < mHeight; y++) {
+        for (int x = 0; x < mWidth; x++) {
+            RGBPixel pixel = getPixel(x, y);
+            out.put(reinterpret_cast<char &>(pixel.red));
+            out.put(reinterpret_cast<char &>(pixel.green));
+            out.put(reinterpret_cast<char &>(pixel.blue));
+        }
+    }
 }
 
 const RGBPixel RGBImage::getPixel(int x, int y) const {
@@ -84,6 +95,19 @@ double RGBPixel::getBrightness() const {
 }
 
 Coordinate RGBImage::findBrightestPixel() const {
-    // TODO [Aufgabe] 3.a)
-    return {0, 0};
+    int maxX = -1;
+    int maxY = -1;
+    double maxBrightness = -1;
+    for (int y = 0; y < mHeight; y++) {
+        for (int x = 0; x < mWidth; x++) {
+            RGBPixel pixel = getPixel(x, y);
+            double brightness = pixel.getBrightness();
+            if (brightness > maxBrightness) {
+                maxX = x;
+                maxY = y;
+                maxBrightness = brightness;
+            }
+        }
+    }
+    return {maxX, maxY};
 }
