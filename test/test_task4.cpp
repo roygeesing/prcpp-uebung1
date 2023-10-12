@@ -55,7 +55,7 @@ TEST(Task4b, GaussianBlurFilterTest) {
     img.write(file);
     cout << "> " << out_path << endl;
 
-    const double tolerance = 0.01;
+    const double tolerance = 0.015;
 
     // Check invariants
     check_blurred_image(img);

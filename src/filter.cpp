@@ -59,6 +59,8 @@ void applyGaussianBlur(const RGBImage& src, RGBImage& dest, double sigma) {
     int height = src.getHeight();
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
+            double r = 0;
+            double g = 0;
             double b = 0;
             double total_weights = 0;
 
@@ -74,14 +76,19 @@ void applyGaussianBlur(const RGBImage& src, RGBImage& dest, double sigma) {
                     }
 
                     double weight = computeGaussian(dx, dy, sigma);
-                    b += src.getPixel(pixelX, pixelY).getBrightness() * weight;
+                    RGBPixel pixel = src.getPixel(pixelX, pixelY);
+                    r += pixel.red / 255.0 * weight;
+                    g += pixel.green / 255.0 * weight;
+                    b += pixel.blue / 255.0 * weight;
                     total_weights += weight;
                 }
             }
 
+            r /= total_weights;
+            g /= total_weights;
             b /= total_weights;
 
-            RGBPixel px(int(b*255), int(b*255), int(b*255));
+            RGBPixel px(int(r*255), int(g*255), int(b*255));
             dest.setPixel(x, y, px);
         }
     }
