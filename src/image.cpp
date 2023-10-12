@@ -49,7 +49,7 @@ void RGBImage::load(istream& in) {
 
     // Image data
     // ==========
-    RGBPixel (*pixelFunction) (istream& in);
+    RGBPixel (*pixelFunction)(istream& in);
 
     if (magic == "P3") {
         pixelFunction = getPlainPixel;

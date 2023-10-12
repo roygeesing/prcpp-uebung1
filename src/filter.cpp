@@ -11,7 +11,6 @@ double computeGaussian(int dx, int dy, double sigma) {
 }
 
 void applyBoxBlur(const RGBImage& src, RGBImage& dest) {
-    std::cout << "starting box blur";
     if (src.getWidth() != dest.getWidth()
         || src.getHeight() != dest.getHeight()) {
         throw runtime_error("Size mismatch");
